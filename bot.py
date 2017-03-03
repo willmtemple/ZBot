@@ -2,6 +2,8 @@
 import discord
 import asyncio
 
+from subprocess import Popen,PIPE
+
 ELEVATOR_MUSIC = "https://www.youtube.com/watch?v=VBlFHuCzPgY"
 
 current_track = ELEVATOR_MUSIC
@@ -155,6 +157,22 @@ async def on_message(message):
 
         if command == '!song':
             await change_song(message)
+
+        if command == '!fortune':
+            fortune = Popen(['fortune', '-a'], stdout=PIPE).communicate()[0]
+            await client.send_message(
+                    message.channel,
+                    'Your fortune is:\n```' + fortune.decode('utf-8') + '```')
+
+        if command == '!cowsay':
+            tosay = ' '.join(words[1:])
+            cowsay = Popen(['cowsay'], stdout=PIPE, stdin=PIPE)
+            out = cowsay.communicate(input=tosay.encode('utf-8'))[0]
+            await client.send_message(
+                    message.channel, '@' + str(message.author) +
+                                     ' said:\n```' + out.decode('utf-8') +
+                                     '```')
+            await client.delete_message(message)
 
         if command == '!debug':
             if message.author.id == '123301224022933504':
