@@ -61,5 +61,9 @@ target/
 # Ipython Notebook
 .ipynb_checkpoints
 
+# Vim autosave files
+*.swp
+*.swo
+
 # Credentials file
 creds
